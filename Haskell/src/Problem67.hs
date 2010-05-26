@@ -1,4 +1,4 @@
-module Problem68 where
+module Problem67 where
 import System.IO
 import Numeric
 
@@ -25,7 +25,7 @@ answer input =  maximum $ getLastLine input
 
 main :: IO ()
 main = do
-        inh <- openFile "input68.txt" ReadMode
+        inh <- openFile "input67.txt" ReadMode
         content <- hGetContents inh
         let contentLines = lines content
         let input = map (map read . words) contentLines :: [[Int]]

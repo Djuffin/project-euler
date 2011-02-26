@@ -65,7 +65,6 @@ calcNext2 = do state <- get
 calcNext :: State CalcState ()
 calcNext = do state <- get
               let n = head (numbers state)
-              --let c = unsafePerformIO (printX n n)
               cachedResult <- lookInResults n
               case cachedResult of
                 (Just x) -> do let newNumbers = tail (numbers state)
@@ -81,9 +80,6 @@ calcAll = do done <- isDone
                          else do state <- get
                                  return $ results state
 
-printX :: Integer -> Integer -> IO Integer
-printX x r = do putStrLn $ show x
-                return r
 
 maxN = 1000000 
 initialState = CalcState { numbers = [1..maxN], results = Map.insert 1 0 Map.empty }

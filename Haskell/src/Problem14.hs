@@ -1,7 +1,14 @@
-module Problem14 where
+module Main where
 import Data.Maybe
 import Data.Array
 import Data.List
+
+import Control.Parallel
+import Control.Parallel.Strategies
+import Control.Monad.State
+import System.IO.Unsafe
+
+import qualified Data.Map as Map
  
 
 {--
@@ -26,25 +33,69 @@ next n = if n `mod` 2 == 0
             then n `div` 2
             else 3 * n + 1 
 
-maxN = 1000000
+data CalcState = CalcState {
+                    numbers :: [Integer],
+                    results :: Map.Map Integer Int
+                  }
 
-lengthTo1 n = memory ! n
-        where memory = listArray (1, 2 * maxN) (0 : map f [2..maxN])
-              f x = 1 + memory ! next x
 
-answer = snd $ maximumBy comparator $ zip all $ map lengthTo1 all 
-         where
-            all = [2..1000000]
+
+isDone :: State CalcState Bool          
+isDone = do state <- get
+            return $ null $ numbers state
+
+lookInResults :: Integer -> State CalcState (Maybe Int)
+lookInResults n = do state <- get
+                     return $ Map.lookup n (results state)
+
+calcNext2 :: State CalcState ()
+calcNext2 = do state <- get
+               let n = head (numbers state)
+               let nextN = next n
+               cachedNextResult <- lookInResults nextN
+               case cachedNextResult of
+                    (Just x) -> do let newNumbers = tail (numbers state)
+                                   let newResults = Map.insert n (x `seq` x + 1) (results state)
+                                   let newState = CalcState newNumbers newResults 
+                                   put newState
+                    Nothing -> do let newNumbers = nextN : (numbers state)
+                                  let newState = state { numbers = newNumbers}
+                                  put newState
+
+calcNext :: State CalcState ()
+calcNext = do state <- get
+              let n = head (numbers state)
+              --let c = unsafePerformIO (printX n n)
+              cachedResult <- lookInResults n
+              case cachedResult of
+                (Just x) -> do let newNumbers = tail (numbers state)
+                               let newState = state { numbers = newNumbers}
+                               put newState
+                              
+                Nothing  -> calcNext2
+
+                                                
+calcAll :: State CalcState (Map.Map Integer Int)
+calcAll = do done <- isDone 
+             if not done then calcNext >> calcAll
+                         else do state <- get
+                                 return $ results state
+
+printX :: Integer -> Integer -> IO Integer
+printX x r = do putStrLn $ show x
+                return r
+
+maxN = 1000000 
+initialState = CalcState { numbers = [1..maxN], results = Map.insert 1 0 Map.empty }
+
+        
+answer = maximumBy comparator $ Map.toList memory  
+          where
+            memory = evalState calcAll initialState
             comparator (_, a) (_, b) = compare a b
 
-next2 n = if (n - 1) `mod` 3 == 0
-            then [(n - 1) `div` 3, 2 * n]
-            else [2 * n]
 
-lens = array (1, maxN)
-
-
---main = do putStrLn $ show $ answer
+main = do putStrLn $ show $ answer
 
 
 

@@ -14,9 +14,9 @@ primes = sieve [2..]
   sieve (p:xs) = p : (sieve $ filter (\x -> x `mod` p /= 0) xs)
 
 isPrime :: Integer -> Bool
-isPrime n = not $ any (\x -> n `mod` x == 0) $ takeWhile (< sqrt_n) primes
+isPrime n = not $ any (\x -> n `mod` x == 0) $ takeWhile (<= sqrt_n) primes
 			where 
-				sqrt_n = floor $ sqrt $ fromInteger n 
+				sqrt_n = ceiling $ sqrt $ fromInteger n 
 
 fromDigits :: [Integer] -> Integer
 fromDigits ds = foldl (\sum d -> sum * 10 + d) 0 ds

@@ -22,14 +22,15 @@ uint32_t  table[max_size + 1];
 const int N = 1000000;
 using namespace std;
 
+//this function is taken from Problem 31, with only addition of % N to avoid overflow
 void inline one_step(int coin)
 {
 	table[coin]++;
 	table[coin] %= N;
 
-	for (int i = coin + 1, j = 1; i <= max_size; i++, j++)
+	for (int i = coin + 1; i <= max_size; i++)
 	{
-		table[i] = (table[i] + table[j]) % N; 
+		table[i] = (table[i] + table[i - coin]) % N; 
 	}
 }
 int main()

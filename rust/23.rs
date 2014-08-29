@@ -21,11 +21,17 @@ sum of two abundant numbers.
 */
 
 fn is_abundant(x:uint) -> bool {
-    let mut result = 0u;
-    for i in range(1, x) {
+    let mut result = 1u;
+    let mut i = 2;
+    while i * i <= x {
         if x % i == 0 {
             result += i;
-        }
+            let j = x / i;
+            if j != i {
+                result += j;
+            }
+        } 
+        i += 1;
     }
     result > x
 }

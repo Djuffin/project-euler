@@ -45,7 +45,7 @@ fn main() {
 
     for i in range(0, abundant_numbers.len()) {
         for j in range(i, abundant_numbers.len()) {
-            let sum = *abundant_numbers.get(i) + *abundant_numbers.get(j);
+            let sum = abundant_numbers[i] + abundant_numbers[j];
             if sum < positives.len() {
                 *positives.get_mut(sum) = true;
             } else {
@@ -56,7 +56,7 @@ fn main() {
 
     let mut result = 0u;
     for i in range(1, positives.len()) {
-        if !positives.get(i) {
+        if !positives[i] {
             result += i;
         }
     }

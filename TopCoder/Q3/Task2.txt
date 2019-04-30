@@ -1,0 +1,110 @@
+
+Problem Statement
+    
+You wish to impress your friends by memorizing several thousand digits of pi. You believe it is easiest to memorize groups of 3 or 4 digits at a time, 
+and decide on the following rules for assigning a complexity value to any group of digits:
+
+    all digits equal                   ("333" or "0000", but not "2233"): 1
+    powers of 2, with no leading zeros ("512" or "4096", but not "0064"): 2
+    consecutive ascending digits       ("012" or "5678", but not "1357"): 4
+    consecutive descending digits      ("987" or "3210", but not "1098"): 5
+    first and last digits equal        ("858" or "1761", but not "8882"): 7
+    any two digits equal               ("655" or "0777", but not "9753"): 8
+    all other groups                   ("832" or "2049"                ): 10
+A group of digits should be assigned the lowest complexity value of the rules it matches. 
+For example, the group "777" matches two rules (all digits equal and first and last digit equal), 
+and it is assigned a complexity value of 1.
+You are to write a method that takes a string of digits and breaks them up into groups of 3 or 4 such 
+that the sum of the complexities for all the groups is minimized.
+
+For example, the string of digits "2562222567" could be broken up into either "256 222 2567" with a 
+complexity of 2+1+10=13, "256 2222 567" with a complexity of 2+1+4=7, or "2562 222 567" with a complexity of 7+1+4=12. 
+The lowest of these three values is 7, so the correct answer is "256 2222 567".
+
+The input will be provided as a string[] digits. Each element of digits will contain only digits ('0' - '9', inclusive). 
+Use the concatenation of all elements as the input to your method. You are to return the same digits as a string[],
+ with a single space inserted between adjacent groups in the same element. Each element can contain a maximum of 100 characters. When populating the String[], put as many groups as possible in the current element before starting a new one. A single group may not span multiple elements, and elements must not contain leading or trailing spaces.
+There may be multiple ways to segment the string of digits that result in the same difficulty. Given two such segmentations, 
+consider the first group at which they differ, and select the segmentation with the three-digit group over the one with the 
+four-digit group. For example, the digits "2222225555555" could be segmented as "222 222 555 5555" or "222 222 5555 555", 
+each with a difficulty of 3. The first difference is the third group, so we select the first choice because its third group 
+has 3 digits.
+Definition
+    
+Class:
+MemorizingPi
+Method:
+segmentation
+Parameters:
+string[]
+Returns:
+string[]
+Method signature:
+string[] segmentation(string[] digits)
+(be sure your method is public)
+    
+
+Constraints
+-
+digits must contain between 1 and 50 elements, inclusive.
+-
+Each element of digits must contain between 1 and 50 characters, inclusive.
+-
+Every character in digits must be a digit ('0'-'9').
+-
+There will be at least 6 characters total in digits.
+Examples
+0)
+
+    
+{ "2562222567" }
+Returns: {"256 2222 567" }
+This is the first example from the problem statement.
+1)
+
+    
+{ "2222",
+  "2",
+  "25",
+  "555",
+  "555" }
+Returns: {"222 222 555 5555" }
+This is the second example from the problem statement.
+2)
+
+    
+{ "31415926535897932384626433832795028841971693993751",
+  "05820974944592307816406286208998628034825342117067",
+  "98214808651328230664709384460955058223172535940812",
+  "84811174502841027019385211055596446229489549303819",
+  "64428810975665933446128475648233786783165271201909",
+  "14564856692346034861045432664821339360726024914127",
+  "37245870066063155881748815209209628292540917153643",
+  "67892590360011330530548820466521384146951941511609" }
+Returns: 
+{"3141 5926 535 8979 3238 4626 433 832 7950 2884 1971 6939 9375 1058 2097 4944 5923 0781 6406 2862",
+ "0899 8628 0348 2534 2117 0679 8214 8086 5132 8230 6647 0938 4460 9550 5822 3172 5359 4081 2848 111",
+ "7450 2841 0270 1938 5211 0555 9644 6229 4895 4930 3819 6442 8810 9756 6593 3446 128 475 6482 3378",
+ "678 3165 2712 0190 914 5648 5669 234 6034 8610 454 3266 4821 3393 6072 6024 9141 2737 2458 7006 6063",
+ "1558 8174 8815 2092 0962 8292 5409 1715 3643 678 9259 0360 0113 3053 054 8820 4665 2138 4146 9519",
+ "4151 1609" }
+The first 400 digits of pi.
+3)
+
+    
+{ "111222333444555",
+  "111222333444555",
+  "111222333444555",
+  "111222333444555",
+  "1112223334445555",
+  "111222333444555",
+  "111222333444555",
+  "111222333444555",
+  "111222333444555",
+  "11122233344445555" }
+Returns: 
+{"111 222 333 444 555 111 222 333 444 555 111 222 333 444 555 111 222 333 444 555 111 222 333 444 5555",
+ "111 222 333 444 555 111 222 333 444 555 111 222 333 444 555 111 222 333 444 555 111 222 333 4444",
+ "5555" }
+
+This problem statement is the exclusive and proprietary property of TopCoder, Inc. Any unauthorized use or reproduction of this information without the prior written consent of TopCoder, Inc. is strictly prohibited. (c)2003, TopCoder, Inc. All rights reserved.
